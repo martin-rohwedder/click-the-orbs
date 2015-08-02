@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour {
 
     public List<GameObject> orbs = new List<GameObject>();
     public Text popupText;
+    public Text scoreText;
+    public Text highscoreText;
+    public GameObject GameOverPanel;
     public float orbLightTime = 1.4f;
     public AudioClip positivePlingSFX;
     public AudioClip negativePlingSFX;
@@ -32,9 +35,12 @@ public class GameManager : MonoBehaviour {
     private bool isDoingPlayerTouch = false;
     private bool isDoingRoundSucces = false;
     private bool isDoingGameOver = false;
+    private int currentScore = 0;
+    private int highestScore = 0;
 
 	// Use this for initialization
 	void Start () {
+        GameOverPanel.SetActive(false);
         audioSource = GetComponent<AudioSource>();
         popupText.text = "";
 
@@ -95,6 +101,40 @@ public class GameManager : MonoBehaviour {
         Debug.Log("Current State == " + currentState.ToString());
 	}
 
+    public void StartNewGame()
+    {
+        audioSource.PlayOneShot(tickSFX);
+        GameOverPanel.SetActive(false);
+        isDoingGameOver = false;
+        isDoingPlayerTouch = false;
+        popupText.text = "";
+        playerTouchIndex = 0;
+        currentOrbColor = 0;
+        currentScore = 0;
+        SetScoreText(0);
+
+        colorList.Clear();
+
+        // Init color list with two random colors
+        for (int i = 0; i < 2; i++)
+        {
+            colorList.Add(Random.Range(1, 6));
+        }
+
+        currentState = States.START;
+    }
+
+    public void GoToMainMenuScene()
+    {
+        audioSource.PlayOneShot(tickSFX);
+        Debug.Log("Load Main Menu Scene");
+    }
+
+    void SetScoreText(int score)
+    {
+        scoreText.text = "Score: " + score;
+    }
+
     IEnumerator DoStartPhase()
     {
         isDoingStart = true;
@@ -126,6 +166,13 @@ public class GameManager : MonoBehaviour {
         yield return new WaitForSeconds(0.2f);
         audioSource.PlayOneShot(negativePlingSFX);
         popupText.text = "Game Over!";
+        GameOverPanel.SetActive(true);
+
+        if (currentScore > highestScore)
+        {
+            highestScore = currentScore;
+            highscoreText.text = "Highscore: " + highestScore;
+        }
 
         yield return null;
     }
@@ -135,6 +182,9 @@ public class GameManager : MonoBehaviour {
         isDoingRoundSucces = true;
 
         yield return new WaitForSeconds(orbLightTime + 0.5f);
+
+        currentScore++;
+        SetScoreText(currentScore);
 
         audioSource.PlayOneShot(positivePlingSFX);
         popupText.text = succesTextList[Random.Range(0, succesTextList.Length)];
