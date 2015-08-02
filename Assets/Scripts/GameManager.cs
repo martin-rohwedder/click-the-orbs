@@ -44,6 +44,9 @@ public class GameManager : MonoBehaviour {
         audioSource = GetComponent<AudioSource>();
         popupText.text = "";
 
+        int bestScore = PlayerPrefs.GetInt("Highscore", 0);
+        highscoreText.text = "Highscore: " + bestScore;
+
         // Init color list with two random colors
         for (int i = 0; i < 2; i++)
         {
@@ -96,6 +99,11 @@ public class GameManager : MonoBehaviour {
             {
                 StartCoroutine(DoGameOver());
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
         }
 
         Debug.Log("Current State == " + currentState.ToString());
@@ -172,9 +180,17 @@ public class GameManager : MonoBehaviour {
         {
             highestScore = currentScore;
             highscoreText.text = "Highscore: " + highestScore;
+
+            SaveScoreToDevice();
         }
 
         yield return null;
+    }
+
+    void SaveScoreToDevice()
+    {
+        PlayerPrefs.SetInt("Highscore", highestScore);
+        PlayerPrefs.Save();
     }
 
     IEnumerator DoRoundSucces()
