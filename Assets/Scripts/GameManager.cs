@@ -135,7 +135,7 @@ public class GameManager : MonoBehaviour {
     public void GoToMainMenuScene()
     {
         audioSource.PlayOneShot(tickSFX);
-        Debug.Log("Load Main Menu Scene");
+        Application.LoadLevel("MainMenuScene");
     }
 
     void SetScoreText(int score)
