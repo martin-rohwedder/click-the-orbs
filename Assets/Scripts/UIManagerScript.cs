@@ -3,19 +3,9 @@ using System.Collections;
 
 public class UIManagerScript : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
-    public void StartNewGame()
+    public void LoadScene(string sceneName)
     {
-        Application.LoadLevel("GameScene");
+        Application.LoadLevel(sceneName);
     }
 
     public void QuitGame()
