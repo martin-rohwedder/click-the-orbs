@@ -135,7 +135,14 @@ public class GameManager : MonoBehaviour {
     public void GoToMainMenuScene()
     {
         audioSource.PlayOneShot(tickSFX);
-        Application.LoadLevel("MainMenuScene");
+        StartCoroutine(LoadMainScene("MainMenuScene"));
+    }
+
+    IEnumerator LoadMainScene(string sceneName)
+    {
+        float fadeTime = GameObject.Find("_ScreenFader").GetComponent<ScreenFader>().BeginFade(1);
+        yield return new WaitForSeconds(fadeTime + 1.0f);
+        Application.LoadLevel(sceneName);
     }
 
     void SetScoreText(int score)
