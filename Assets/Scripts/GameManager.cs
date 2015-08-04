@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour {
     public Text highscoreText;
     public GameObject GameOverPanel;
     public float orbLightTime = 1.4f;
+    public float playerOrbClickDelay = 1.4f;
     public AudioClip positivePlingSFX;
     public AudioClip negativePlingSFX;
     public AudioClip tickSFX;
@@ -288,7 +289,7 @@ public class GameManager : MonoBehaviour {
     IEnumerator LightUpOrb(int orbIndex)
     {
         orbs[orbIndex].SetActive(true);
-        yield return new WaitForSeconds(orbLightTime);
+        yield return new WaitForSeconds(playerOrbClickDelay);
         orbs[orbIndex].SetActive(false);
         isDoingPlayerTouch = false;
 
